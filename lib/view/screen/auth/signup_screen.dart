@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SignupScreen extends GetView<AuthController> {
-  const SignupScreen({super.key});
+  final controller = Get.put(AuthController());
 
+  SignupScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,29 +26,60 @@ class SignupScreen extends GetView<AuthController> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Stack(
-                      children: [
-                        const CircleAvatar(
-                          radius: 60,
-                          backgroundImage: NetworkImage(
-                              'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'),
-                        ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
-                          child: Container(
-                            decoration: const BoxDecoration(
-                                color: Colors.white, shape: BoxShape.circle),
-                            child: IconButton(
-                              icon: const Icon(Icons.camera_alt_outlined),
-                              onPressed: () {
-                                controller.pickImage();
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    GetBuilder<AuthController>(
+                        init: controller,
+                        builder: (_) {
+                          if (controller.image != null) {
+                            return Stack(
+                              children: [
+                                CircleAvatar(
+                                  radius: 60,
+                                  backgroundImage: FileImage(controller.image!),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        shape: BoxShape.circle),
+                                    child: IconButton(
+                                      icon:
+                                          const Icon(Icons.camera_alt_outlined),
+                                      onPressed: () {
+                                        controller.pickImage();
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                          return Stack(
+                            children: [
+                              const CircleAvatar(
+                                radius: 60,
+                                backgroundImage: NetworkImage(
+                                    'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'),
+                              ),
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle),
+                                  child: IconButton(
+                                    icon: const Icon(Icons.camera_alt_outlined),
+                                    onPressed: () {
+                                      controller.pickImage();
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }),
                     const SizedBox(
                       height: 20,
                     ),
